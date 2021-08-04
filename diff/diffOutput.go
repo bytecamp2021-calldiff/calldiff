@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"unicode"
@@ -208,16 +207,11 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	err := ioutil.WriteFile("call-graph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
+	err := ioutil.WriteFile("./callgraph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
 	if err != nil {
 		fmt.Println(err)
 	}
-	gvAbsPath, err1 := filepath.Abs("call-graph.gv")
-	svgAbsPath, err2 := filepath.Abs("call-graph.svg")
-	if err1 != nil || err2 != nil {
-		fmt.Println(err1, err2)
-	}
-	execCommand(`dot`, gvAbsPath, "-Tsvg", "-o", svgAbsPath)
+	execCommand(`dot`, "./callgraph.gv", "-Tsvg", "-o", "./callgraph.svg")
 }
 
 func execCommand(programName string, programArgs ...string) {

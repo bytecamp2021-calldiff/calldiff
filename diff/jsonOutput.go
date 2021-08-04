@@ -3,6 +3,8 @@ package diff
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
+	"io/ioutil"
 )
 
 type Output struct {
@@ -30,7 +32,7 @@ type affectedCall struct {
 	AffectedBy []string `json:"affected_by"`
 }
 
-func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg string) string {
+func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg string) error {
 	var o Output
 	o.Pkg = pkg
 	for _, node := range g.Nodes {
@@ -63,10 +65,12 @@ func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg st
 	}
 	marshal, err := json.MarshalIndent(o, "", "    ")
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	fmt.Println("Diff", string(marshal))
-	return string(marshal)
+	if err := ioutil.WriteFile("./output.json", marshal, fs.ModePerm); err != nil {
+		return err
+	}
+	return nil
 }
 
 func getModificationDetail(g *DiffGraph, node *DiffNode) (result modifiedApi) {

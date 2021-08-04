@@ -76,7 +76,7 @@ go build -o calldiff main.go
 
 ### Dragonfly 项目
 
-```
+```bash
 ./calldiff \
     --url=https://github.com/dragonflyoss/Dragonfly.git \
     --dir=./Dragonfly \ --old=7856ccdbb1e91bf2fefdc32e030780224f68e4be \
