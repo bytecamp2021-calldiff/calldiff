@@ -54,8 +54,8 @@ func main() {
 	for i := 0; i < 2; i++ {
 		diffOptions.Wg.Add(1)
 		go graph.GetCallgraph(&diffOptions, i)
-		diffOptions.Wg.Wait()
 	}
+	diffOptions.Wg.Wait()
 
 	diffGraph := diff.GetDiff(diffOptions.Callgraph[0], diffOptions.Callgraph[1])
 	diffGraph.OutputDiffGraph(diffOptions.PrintPrivate, diffOptions.PrintUnchanged, diffOptions.Pkg)

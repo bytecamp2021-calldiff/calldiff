@@ -127,8 +127,12 @@ func GetCallgraph(diffOptions *common.DiffOptions, i int) {
 }
 
 func isPublic(f *ssa.Function) bool {
-	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))?init", f.Name())
+	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))init", f.Name())
 	return unicode.IsUpper(rune(f.Name()[0])) || f.Name() == "main" || match
+}
+
+func isAutoInit(f *ssa.Function) bool {
+	return f.Name() == "init"
 }
 
 func getAllFunctions(s *ssa.Package) *[]*ssa.Function {
@@ -169,8 +173,12 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 	for _, main := range mains {
 		funcList := getAllFunctions(main)
 		for _, ssaFunc := range *funcList {
+			if isAutoInit(ssaFunc) {
+				continue
+			}
 			if diffOptions.PrintPrivate || isPublic(ssaFunc) {
 				roots = append(roots, ssaFunc)
+				fmt.Println("name:", ssaFunc.Pkg.Pkg.Name(), ssaFunc.Name())
 			}
 		}
 	}

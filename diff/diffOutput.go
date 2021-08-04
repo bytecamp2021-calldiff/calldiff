@@ -65,7 +65,7 @@ func (n *DiffNode) GetFuncName() string {
 
 func (n *DiffNode) isPrivate() bool {
 	splits := strings.Split(n.Name, "#")
-	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))?init", splits[2])
+	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))init", splits[2])
 	return !unicode.IsUpper([]rune(splits[2])[0]) && splits[2] != "main" && !match
 }
 
@@ -177,7 +177,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
 		}
 		if !graph.IsSubGraph(node.GetPkgName()) {
 			_ = graph.AddSubGraph("G", `cluster_`+cleanPathSep(node.GetPath()), map[string]string{ // 必须以cluster开头，否则不加框
-				"label": "\"" + node.GetPkgName() + "\n" + node.GetPath() + "\"",
+				"label": "\"" + node.GetPkgName() + "\n(" + node.GetPath() + ")\"",
 			})
 		}
 		_ = graph.AddNode(`cluster_`+cleanPathSep(node.GetPath()), `"`+node.Name+`"`, map[string]string{
