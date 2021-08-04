@@ -177,7 +177,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
 		}
 		if !graph.IsSubGraph(node.GetPkgName()) {
 			_ = graph.AddSubGraph("G", `cluster_`+cleanPathSep(node.GetPath()), map[string]string{ // 必须以cluster开头，否则不加框
-				"label": "\"" + node.GetPath() + "\npkg:" + node.GetPkgName() + "\"",
+				"label": "\"" + node.GetPkgName() + "\n" + node.GetPath() + "\"",
 			})
 		}
 		_ = graph.AddNode(`cluster_`+cleanPathSep(node.GetPath()), `"`+node.Name+`"`, map[string]string{
@@ -205,7 +205,6 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
 			})
 		}
 	}
-	fmt.Println("打开 https://dreampuf.github.io/GraphvizOnline/, 或者下载 graphviz: https://graphviz.org/download/ 后执行 dot 11.gv -T svg -o 11.svg")
 	err := ioutil.WriteFile("call-graph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
 	if err != nil {
 		fmt.Println(err)
