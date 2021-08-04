@@ -96,7 +96,7 @@ func getModificationDetail(g *DiffGraph, node *DiffNode) (result modifiedApi) {
 				flags[node] = false
 			}
 			affectedBys := make([]*DiffNode, 0)
-			findAffectedBy(node, flags, &affectedBys)
+			findAffectedBy(edge.Node, flags, &affectedBys)
 			if result.AffectedCall == nil {
 				result.AffectedCall = []affectedCall{}
 			}
