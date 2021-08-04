@@ -85,3 +85,73 @@ go build -o calldiff main.go
 ```
 
 该命令首先会从 github 上 clone 目标项目至 `dir` 下，并比较 `7856ccdbb1e91bf2fefdc32e030780224f68e4be` 和 HEAD  两个 Commit 的函数调用关系图之间差异。
+
+```json
+{
+    "pkg": "server",
+    "change_list": {
+        "modified": [
+            {
+                "name": "server.EncodeResponse",
+                "added_call": [
+                    "api.SendResponse"
+                ],
+                "deleted_call": null,
+                "affected_call": null,
+                "ast_changed": true
+            },
+            {
+                "name": "server.handleMetrics",
+                "added_call": null,
+                "deleted_call": null,
+                "affected_call": null,
+                "ast_changed": true
+            },
+            {
+                "name": "server.newMetrics",
+                "added_call": null,
+                "deleted_call": null,
+                "affected_call": null,
+                "ast_changed": true
+            },
+            {
+                "name": "server.New",
+                "added_call": [
+                    "preheat.NewManager"
+                ],
+                "deleted_call": null,
+                "affected_call": [
+                    {
+                        "name": "task.NewManager",
+                        "affected_by": [
+                            "task.newMetrics"
+                        ]
+                    }
+                ],
+                "ast_changed": true
+            }
+        ],
+        "new": [
+            "server.createRouter",
+            "server.registerCoreHandlers",
+            "server.initAPIRoutes$1",
+            "server.initDebugRoutes",
+            "server.initAPIRoutes",
+            "server.registerSystem",
+            "server.preheatHandlers",
+            "server.httpErr",
+            "server.registerLegacy",
+            "server.registerV1"
+        ],
+        "deleted": [
+            "server.(github.com/dragonflyoss/Dragonfly/supernode/server.ResultInfo)Error",
+            "server.initRoute",
+            "server.filter",
+            "server.HandleErrorResponse"
+        ],
+        "unchanged": null
+    }
+}
+```
+
+<div style="text-align:center"><img src="docs/images/output2.svg" /></div>
