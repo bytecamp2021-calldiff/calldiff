@@ -1,0 +1,258 @@
+package diff
+
+import (
+	"fmt"
+	"github.com/awalterschulze/gographviz"
+	"io/ioutil"
+	"log"
+	"os/exec"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"unicode"
+)
+
+type DiffType int
+
+const (
+	UNCHANGED = iota // 不变
+	INSERTED         // 新增
+	REMOVED          // 删除
+	CHANGED          // 变化
+	AFFECTED         // 传播中受到了影响
+)
+
+//type DiffEdge struct {
+//	Node  *DiffNode //连接的点
+//	Difference int       //0表示不变，1新增，2删除，3改变
+//}
+type DiffEdge struct {
+	Node       *DiffNode //连接的点
+	Difference DiffType
+}
+
+type DiffNode struct {
+	Name       string               //函数名称
+	Difference DiffType             //0本身代码无变化，1新增，2删除，3本身的代码改变
+	CallEdge   map[string]*DiffEdge //调用的函数，map[调用的函数名称]
+}
+
+func (n *DiffNode) GetPkgName() string {
+	splits := strings.Split(n.Name, "#")
+	return splits[1]
+}
+
+func (n *DiffNode) GetPath() string {
+	splits := strings.Split(n.Name, "#")
+	return splits[0]
+}
+
+func cleanPathSep(p string) string {
+	p = strings.ReplaceAll(p, "/", "__")
+	p = strings.ReplaceAll(p, "-", "_")
+	return strings.ReplaceAll(p, ".", "_")
+}
+
+func (n *DiffNode) GetFuncName() string {
+	splits := strings.Split(n.Name, "#")
+	if len(splits[3]) == 0 {
+		return splits[2]
+	} else {
+		return fmt.Sprintf("(%s)%s", splits[3], splits[2])
+	}
+}
+func (n *DiffNode) isPrivate() bool {
+	splits := strings.Split(n.Name, "#")
+	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))?init", splits[2])
+	return !unicode.IsUpper([]rune(splits[2])[0]) && splits[2] != "main" && !match
+}
+func (n *DiffNode) GetPrettyName() string {
+	return fmt.Sprintf("%s.%s", n.GetPkgName(), n.GetFuncName())
+}
+
+type DiffGraph struct {
+	Nodes map[string]*DiffNode
+}
+
+//方便申请节点
+func newDiffGraphHelper() *DiffGraph {
+	var ans = new(DiffGraph)
+	ans.Nodes = make(map[string]*DiffNode)
+	return ans
+}
+
+func newDiffNodeHelper() *DiffNode {
+	var ans = new(DiffNode)
+	ans.CallEdge = make(map[string]*DiffEdge)
+	return ans
+}
+
+func newDiffEdgeHelper(n *DiffNode) *DiffEdge {
+	var ans = new(DiffEdge)
+	ans.Difference = UNCHANGED
+	ans.Node = n
+	return ans
+}
+
+func (g *DiffGraph) DebugDiffGraph() {
+	for key, value := range g.Nodes {
+		fmt.Println(key)
+		for callname := range value.CallEdge {
+			fmt.Println("..", callname)
+		}
+	}
+}
+
+func (g *DiffGraph) OutputDiffGraph(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
+	//g.calcAffected()  // 计算哪些节点是黄色节点/受影响节点
+	g.Visualization(doPrintPrivate, doPrintUnchanged) // graphviz 可视化
+	OutputJson(g, doPrintPrivate, doPrintUnchanged, pkg)
+}
+
+func dfsDiffNode(n *DiffNode, doPrintPrivate bool, doPrintUnchanged bool, vis *map[*DiffNode]struct{}) {
+	(*vis)[n] = struct{}{}
+	for _, edge := range n.CallEdge {
+		if _, ok := (*vis)[edge.Node]; ok {
+			continue
+		}
+		if !doPrintPrivate && edge.Node.isPrivate() {
+			continue
+		}
+		if !doPrintUnchanged && edge.Difference == UNCHANGED {
+			continue
+		}
+		dfsDiffNode(edge.Node, doPrintPrivate, doPrintUnchanged, vis)
+	}
+}
+
+func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
+	graphAst, _ := gographviz.ParseString(`digraph G {}`)
+	graph := gographviz.NewGraph()
+	if err := gographviz.Analyse(graphAst, graph); err != nil {
+		panic(err)
+	}
+	_ = graph.AddAttr("G", "rankdir", `"LR"`)
+	// 定义属性
+	lineColorMap := map[DiffType]string{
+		UNCHANGED: "\"#000000\"",
+		INSERTED:  "\"#82B366\"",
+		REMOVED:   "\"#B85450\"",
+		CHANGED:   "\"#D79B00\"",
+		AFFECTED:  "\"#D7B953\"",
+	}
+	lineStyleMap := map[DiffType]string{
+		UNCHANGED: `""`,
+		INSERTED:  `""`,
+		REMOVED:   `dashed`,
+		CHANGED:   `""`,
+		AFFECTED:  `""`,
+	}
+	fillColorMap := map[DiffType]string{
+		UNCHANGED: "\"#DAE8FC\"",
+		INSERTED:  "\"#D5E8D4\"",
+		REMOVED:   "\"#F8CECC\"",
+		CHANGED:   "\"#FFE6CC\"",
+		AFFECTED:  "\"#FFF2CD\"",
+	}
+	// 遍历确定哪些节点可达
+	vis := make(map[*DiffNode]struct{})
+	for _, node := range g.Nodes {
+		if _, ok := vis[node]; !ok {
+			if !doPrintPrivate && node.isPrivate() {
+				continue
+			}
+			if !doPrintUnchanged && node.Difference == UNCHANGED {
+				continue
+			}
+			dfsDiffNode(node, doPrintPrivate, doPrintUnchanged, &vis)
+		}
+	}
+	// 将所有节点加入到图中
+	for _, node := range g.Nodes {
+		if _, ok := vis[node]; !ok {
+			continue
+		}
+		if !graph.IsSubGraph(node.GetPkgName()) {
+			_ = graph.AddSubGraph("G", `cluster_`+cleanPathSep(node.GetPath()), map[string]string{ // 必须以cluster开头，否则不加框
+				"label": "\"" + node.GetPath() + "\npkg:" + node.GetPkgName() + "\"",
+			})
+		}
+		_ = graph.AddNode(`cluster_`+cleanPathSep(node.GetPath()), `"`+node.Name+`"`, map[string]string{
+			"color":     lineColorMap[node.Difference],
+			"label":     `"` + node.GetFuncName() + `"`,
+			"style":     "filled",
+			"fillcolor": fillColorMap[node.Difference],
+		})
+	}
+	// 添加边
+	for _, node := range g.Nodes {
+		if _, ok := vis[node]; !ok {
+			continue
+		}
+		for _, edge := range node.CallEdge {
+			if _, ok := vis[edge.Node]; !ok {
+				continue
+			}
+			if !doPrintUnchanged && edge.Difference == UNCHANGED {
+				continue
+			}
+			_ = graph.AddEdge(`"`+node.Name+`"`, `"`+edge.Node.Name+`"`, true, map[string]string{
+				"color": lineColorMap[edge.Difference],
+				"style": lineStyleMap[edge.Difference],
+			})
+		}
+	}
+	fmt.Println("打开 https://dreampuf.github.io/GraphvizOnline/, 或者下载 graphviz: https://graphviz.org/download/ 后执行 dot 11.gv -T svg -o 11.svg")
+	err := ioutil.WriteFile("call-graph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
+	if err != nil {
+		fmt.Println(err)
+	}
+	gvAbsPath, err1 := filepath.Abs("call-graph.gv")
+	svgAbsPath, err2 := filepath.Abs("call-graph.svg")
+	if err1 != nil || err2 != nil {
+		fmt.Println(err1, err2)
+	}
+	execCommand(`dot`, gvAbsPath, "-Tsvg", "-o", svgAbsPath)
+}
+
+func execCommand(programName string, programArgs ...string) {
+	cmd := exec.Command(programName, programArgs...)
+	stdout, err := cmd.StdoutPipe()
+	stderr, _ := cmd.StderrPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stdout.Close()
+	defer stderr.Close()
+	if err := cmd.Start(); err != nil { // 运行命令
+		log.Fatal(err)
+	}
+	if opBytes, err := ioutil.ReadAll(stdout); err != nil { // 读取输出结果
+		log.Fatal(err)
+	} else {
+		if len(opBytes) >= 2 {
+			log.Println(string(opBytes))
+		}
+	}
+	if opBytes, err := ioutil.ReadAll(stderr); err != nil { // 读取输出结果
+		log.Fatal(err)
+	} else {
+		if len(opBytes) >= 2 {
+			log.Println(string(opBytes))
+		}
+	}
+}
+
+func (g *DiffGraph) calcAffected() {
+	for _, value := range g.Nodes {
+		if value.Difference != UNCHANGED {
+			continue
+		}
+		for _, edge := range value.CallEdge {
+			if edge.Difference == CHANGED {
+				value.Difference = AFFECTED
+				break
+			}
+		}
+	}
+}
