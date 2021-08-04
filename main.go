@@ -44,10 +44,7 @@ func main() {
 	flag.StringVar(&diffOptions.Dir, "dir", ".", `Repository path`)
 	flag.StringVar(&diffOptions.Commit[0], "old", "HEAD^", `Old commit ID`)
 	flag.StringVar(&diffOptions.Commit[1], "new", "HEAD", `New commit ID`)
-	flag.StringVar(&diffOptions.Algo, "algo", "rta", `Call graph construction algorithm (static, cha, rta, pta)`)
 	flag.BoolVar(&diffOptions.Test, "test", false, `Loads test code (*_test.go) for imported packages`)
-	flag.StringVar(&diffOptions.Format, "format", "", `A template expression specifying how to format an edge`)
-	flag.StringVar(&diffOptions.Ptalog, "ptalog", "", `Location of the points-to analysis log file, or empty to disable logging`)
 	flag.BoolVar(&diffOptions.PrintPrivate, "private", false, `If output private function`)
 	flag.BoolVar(&diffOptions.PrintUnchanged, "unchanged", false, `If output unchanged function`)
 	flag.StringVar(&diffOptions.Pkg, "pkg", "main", `Analyse which packages`)
@@ -61,7 +58,5 @@ func main() {
 	}
 
 	diffGraph := diff.GetDiff(diffOptions.Callgraph[0], diffOptions.Callgraph[1])
-	//diffGraph.DebugDiffGraph()
 	diffGraph.OutputDiffGraph(diffOptions.PrintPrivate, diffOptions.PrintUnchanged, diffOptions.Pkg)
-	// TODO: result, err := ouputDiff()
 }

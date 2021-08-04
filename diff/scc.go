@@ -11,6 +11,7 @@ type Component struct {
 	callnum   int  //调用的函数数
 	isChanged bool //调用的函数中有无发生改变的
 }
+
 type ComponentGraph struct {
 	belongs map[string]*Component
 	nodes   []*Component
@@ -23,6 +24,7 @@ func newComponentHelper(id int) *Component {
 	c.calledge = make(map[int]*Component)
 	return c
 }
+
 func newComponentGraphHelper() *ComponentGraph {
 	var g = new(ComponentGraph)
 	g.belongs = make(map[string]*Component)

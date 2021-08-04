@@ -2,7 +2,6 @@ package diff
 
 import (
 	"fmt"
-	"github.com/awalterschulze/gographviz"
 	"io/ioutil"
 	"log"
 	"os/exec"
@@ -10,6 +9,8 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+
+	"github.com/awalterschulze/gographviz"
 )
 
 type DiffType int
@@ -61,11 +62,13 @@ func (n *DiffNode) GetFuncName() string {
 		return fmt.Sprintf("(%s)%s", splits[3], splits[2])
 	}
 }
+
 func (n *DiffNode) isPrivate() bool {
 	splits := strings.Split(n.Name, "#")
 	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))?init", splits[2])
 	return !unicode.IsUpper([]rune(splits[2])[0]) && splits[2] != "main" && !match
 }
+
 func (n *DiffNode) GetPrettyName() string {
 	return fmt.Sprintf("%s.%s", n.GetPkgName(), n.GetFuncName())
 }

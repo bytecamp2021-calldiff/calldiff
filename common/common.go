@@ -13,10 +13,7 @@ type DiffOptions struct {
 	Url            string
 	Dir            string
 	Commit         [2]string
-	Algo           string
 	Test           bool
-	Format         string
-	Ptalog         string
 	Wg             sync.WaitGroup
 	Callgraph      [2]*callgraph.Graph
 	Path           [2]string

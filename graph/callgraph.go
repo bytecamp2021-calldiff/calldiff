@@ -1,11 +1,9 @@
 package graph
 
 import (
-	"bytes"
 	"calldiff/common"
 	"fmt"
 	"go/token"
-	"html/template"
 	"io"
 	"io/ioutil"
 	"os"
@@ -149,9 +147,6 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 		Tests: diffOptions.Test,
 		Dir:   diffOptions.Path[i],
 	}
-	// if gopath != "" {
-	// 	cfg.Env = append(os.Environ(), "GOPATH="+gopath) // to enable testing
-	// }
 	initial, err := packages.Load(cfg, "./...")
 	if err != nil {
 		return err
@@ -185,53 +180,6 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 	// NB: RTA gives us Reachable and RuntimeTypes too.
 
 	diffOptions.Callgraph[i].DeleteSyntheticNodes()
-
-	// -- output------------------------------------------------------------
-
-	if diffOptions.Format != "" {
-		var before, after string
-
-		// Pre-canned formats.
-		switch diffOptions.Format {
-		case "digraph":
-			diffOptions.Format = `{{printf "%q %q" .Caller .Callee}}`
-
-		case "graphviz":
-			before = "digraph callgraph {\n"
-			after = "}\n"
-			diffOptions.Format = `  {{printf "%q" .Caller}} -> {{printf "%q" .Callee}}`
-		}
-
-		tmpl, err := template.New("-format").Parse(diffOptions.Format)
-		if err != nil {
-			return fmt.Errorf("invalid -format template: %v", err)
-		}
-
-		// Allocate these once, outside the traversal.
-		var buf bytes.Buffer
-		data := Edge{fset: prog.Fset}
-
-		fmt.Fprint(stdout, before)
-		if err := callgraph.GraphVisitEdges(diffOptions.Callgraph[i], func(edge *callgraph.Edge) error {
-			data.position.Offset = -1
-			data.edge = edge
-			data.Caller = edge.Caller.Func
-			data.Callee = edge.Callee.Func
-
-			buf.Reset()
-			if err := tmpl.Execute(&buf, &data); err != nil {
-				return err
-			}
-			stdout.Write(buf.Bytes())
-			if len := buf.Len(); len == 0 || buf.Bytes()[len-1] != '\n' {
-				fmt.Fprintln(stdout)
-			}
-			return nil
-		}); err != nil {
-			return err
-		}
-		fmt.Fprint(stdout, after)
-	}
 	return nil
 }
 

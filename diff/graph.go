@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
-	"go/build"
 	"go/types"
+	"strings"
+
 	"golang.org/x/tools/go/callgraph"
 	"golang.org/x/tools/go/ssa"
-	"strings"
 )
 
 type Node struct {
@@ -110,41 +110,16 @@ func getFuncHash(ssaFunction *ssa.Function) [32]byte {
 	return sha256.Sum256([]byte(resultString))
 }
 
-func inStd(node *callgraph.Node, cache *map[*types.Package]bool) bool {
-	return false
-	if value, exists := (*cache)[node.Func.Pkg.Pkg]; exists {
-		return value
-	}
-	pkg, _ := build.Import(node.Func.Pkg.Pkg.Path(), "", 0)
-	(*cache)[node.Func.Pkg.Pkg] = pkg.Goroot
-	return pkg.Goroot
-}
-
-/*
-func inStd(node *callgraph.Node) bool {
-	pkg, _ := build.Import(node.Func.Pkg.Pkg.Path(), "", 0)
-	return pkg.Goroot
-}*/
-
 func callgraph2graph(cg *callgraph.Graph) *Graph {
 	var g = newGraphHelper()
-	//pathCache := make(map[*types.Package]bool)
 	nodeMap := make(map[*callgraph.Node]struct{})
 	for key, value := range cg.Nodes {
-		//log.Printf("hhh\n")
-		//if inStd(value, &pathCache) {
-		//	//log.Printf("hhh over\n")
-		//	continue
-		//}
 		nodeMap[value] = struct{}{}
-		//log.Printf("hhh over\n")
 		s := func2str(key)
-		// fmt.Println(s)
 		g.nodes[s] = newNodeHelper()
 		g.nodes[s].name = s
 		g.nodes[s].hashNum = getFuncHash(key)
 	}
-	// fmt.Println("over!!!")
 	for node, _ := range nodeMap {
 		for _, edge := range node.Out {
 			if _, ok := nodeMap[edge.Callee]; ok {

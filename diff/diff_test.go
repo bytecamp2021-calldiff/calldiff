@@ -19,6 +19,7 @@ func makeTestGraph(n []int, e [][]int, h []int, g *Graph) {
 		g.nodes[name[v]].isChanged = true
 	}
 }
+
 func getGraph(id int) (*Graph, *Graph) {
 	var g1 = newGraphHelper()
 	var g2 = newGraphHelper()

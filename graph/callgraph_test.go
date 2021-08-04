@@ -11,14 +11,15 @@ package graph
 
 import (
 	"fmt"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa/ssautil"
 	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/ssa/ssautil"
 )
 
 func init() {
