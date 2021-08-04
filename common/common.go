@@ -15,7 +15,7 @@ type DiffOptions struct {
 	Commit         [2]string
 	Test           bool
 	Wg             sync.WaitGroup
-	Callgraph      [2]*callgraph.Graph
+	CallGraph      [2]*callgraph.Graph
 	Path           [2]string
 	PrintPrivate   bool
 	PrintUnchanged bool

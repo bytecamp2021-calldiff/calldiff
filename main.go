@@ -1,8 +1,8 @@
 package main
 
 import (
+	"calldiff/analyze"
 	"calldiff/common"
-	"calldiff/diff"
 	"calldiff/graph"
 	"flag"
 	"go/build"
@@ -54,8 +54,8 @@ func main() {
 	}
 	diffOptions.Wg.Wait()
 
-	//fmt.Println(len(diffOptions.Callgraph[0].Nodes))
+	//fmt.Println(len(diffOptions.CallGraph[0].Nodes))
 
-	diffGraph := diff.GetDiff(diffOptions.Callgraph[0], diffOptions.Callgraph[1])
+	diffGraph := analyze.GetDiff(diffOptions.CallGraph[0], diffOptions.CallGraph[1])
 	diffGraph.OutputDiffGraph(diffOptions.PrintPrivate, diffOptions.PrintUnchanged, diffOptions.Pkg)
 }

@@ -1,6 +1,7 @@
-package diff
+package analyze
 
 import (
+	"calldiff/view"
 	"fmt"
 	"testing"
 )
@@ -36,7 +37,7 @@ func getGraph(id int) (*Graph, *Graph) {
 	return g1, g2
 }
 
-func printDiffNode(g *DiffGraph) {
+func printDiffNode(g *view.DiffGraph) {
 	for key := range g.Nodes {
 		fmt.Print(key, " ")
 	}
@@ -44,21 +45,21 @@ func printDiffNode(g *DiffGraph) {
 
 func TestMakeDiffNode(t *testing.T) {
 	var g1, g2 = getGraph(1)
-	var g3 = newDiffGraphHelper()
+	var g3 = view.NewDiffGraphHelper()
 	makeDiffNode(g1, g2, g3)
 	printDiffNode(g3)
 }
 
 func TestMakeSomeEdge(t *testing.T) {
 	var g1, g2 = getGraph(1)
-	var g3 = newDiffGraphHelper()
+	var g3 = view.NewDiffGraphHelper()
 	makeDiffNode(g1, g2, g3)
 	makeSameEdge(g1, g2, g3)
 	printDiffNode(g3)
 }
 func TestMakeDiffEdge(t *testing.T) {
 	var g1, g2 = getGraph(1)
-	var g3 = newDiffGraphHelper()
+	var g3 = view.NewDiffGraphHelper()
 	makeDiffNode(g1, g2, g3)
 	makeSameEdge(g1, g2, g3)
 	makeDiffEdge(g1, g2, g3)

@@ -1,4 +1,4 @@
-package diff
+package analyze
 
 //该文件中即为强连通分量部分用于建立新图以进行步骤四五
 type Component struct {

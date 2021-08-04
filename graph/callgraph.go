@@ -101,11 +101,11 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 		}
 	}
 	rtares := rta.Analyze(roots, true)
-	diffOptions.Callgraph[i] = rtares.CallGraph
+	diffOptions.CallGraph[i] = rtares.CallGraph
 
 	// NB: RTA gives us Reachable and RuntimeTypes too.
 
-	diffOptions.Callgraph[i].DeleteSyntheticNodes()
+	diffOptions.CallGraph[i].DeleteSyntheticNodes()
 	return nil
 }
 

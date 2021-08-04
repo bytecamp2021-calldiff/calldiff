@@ -1,4 +1,4 @@
-package diff
+package view
 
 import (
 	"fmt"
@@ -62,7 +62,7 @@ func (n *DiffNode) GetFuncName() string {
 	}
 }
 
-func (n *DiffNode) isPrivate() bool {
+func (n *DiffNode) IsPrivate() bool {
 	splits := strings.Split(n.Name, "#")
 	match, _ := regexp.MatchString("(\\([1-9][0-9]*\\))init", splits[2])
 	return !unicode.IsUpper([]rune(splits[2])[0]) && splits[2] != "main" && !match
@@ -77,19 +77,19 @@ type DiffGraph struct {
 }
 
 //方便申请节点
-func newDiffGraphHelper() *DiffGraph {
+func NewDiffGraphHelper() *DiffGraph {
 	var ans = new(DiffGraph)
 	ans.Nodes = make(map[string]*DiffNode)
 	return ans
 }
 
-func newDiffNodeHelper() *DiffNode {
+func NewDiffNodeHelper() *DiffNode {
 	var ans = new(DiffNode)
 	ans.CallEdge = make(map[string]*DiffEdge)
 	return ans
 }
 
-func newDiffEdgeHelper(n *DiffNode) *DiffEdge {
+func NewDiffEdgeHelper(n *DiffNode) *DiffEdge {
 	var ans = new(DiffEdge)
 	ans.Difference = UNCHANGED
 	ans.Node = n
@@ -106,7 +106,7 @@ func (g *DiffGraph) DebugDiffGraph() {
 }
 
 func (g *DiffGraph) OutputDiffGraph(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
-	//g.calcAffected()  // 计算哪些节点是黄色节点/受影响节点
+	//g.CalcAffected()  // 计算哪些节点是黄色节点/受影响节点
 	g.Visualization(doPrintPrivate, doPrintUnchanged, pkg) // graphviz 可视化
 	OutputJson(g, doPrintPrivate, doPrintUnchanged, pkg)
 }
@@ -117,7 +117,7 @@ func dfsDiffNode(n *DiffNode, doPrintPrivate bool, doPrintUnchanged bool, vis *m
 		if _, ok := (*vis)[edge.Node]; ok {
 			continue
 		}
-		if !doPrintPrivate && edge.Node.isPrivate() {
+		if !doPrintPrivate && edge.Node.IsPrivate() {
 			continue
 		}
 		if !doPrintUnchanged && edge.Difference == UNCHANGED {
@@ -163,7 +163,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			if node.GetPkgName() != pkg {
 				continue
 			}
-			if !doPrintPrivate && node.isPrivate() {
+			if !doPrintPrivate && node.IsPrivate() {
 				continue
 			}
 			if !doPrintUnchanged && node.Difference == UNCHANGED {
@@ -242,7 +242,7 @@ func execCommand(programName string, programArgs ...string) {
 	}
 }
 
-func (g *DiffGraph) calcAffected() {
+func (g *DiffGraph) CalcAffected() {
 	for _, value := range g.Nodes {
 		if value.Difference != UNCHANGED {
 			continue

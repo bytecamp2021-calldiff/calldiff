@@ -1,4 +1,4 @@
-package diff
+package view
 
 import (
 	"encoding/json"
@@ -37,7 +37,7 @@ func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg st
 	o.Pkg = pkg
 	for _, node := range g.Nodes {
 		if node.GetPkgName() == pkg {
-			if !doPrintPrivate && node.isPrivate() {
+			if !doPrintPrivate && node.IsPrivate() {
 				continue
 			}
 			switch node.Difference {
