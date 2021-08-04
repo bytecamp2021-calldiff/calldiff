@@ -178,7 +178,7 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 			}
 			if diffOptions.PrintPrivate || isPublic(ssaFunc) {
 				roots = append(roots, ssaFunc)
-				fmt.Println("name:", ssaFunc.Pkg.Pkg.Name(), ssaFunc.Name())
+				//fmt.Println("name:", ssaFunc.Pkg.Pkg.Name(), ssaFunc.Name())
 			}
 		}
 	}

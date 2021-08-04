@@ -108,7 +108,7 @@ func (g *DiffGraph) DebugDiffGraph() {
 
 func (g *DiffGraph) OutputDiffGraph(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
 	//g.calcAffected()  // 计算哪些节点是黄色节点/受影响节点
-	g.Visualization(doPrintPrivate, doPrintUnchanged) // graphviz 可视化
+	g.Visualization(doPrintPrivate, doPrintUnchanged, pkg) // graphviz 可视化
 	OutputJson(g, doPrintPrivate, doPrintUnchanged, pkg)
 }
 
@@ -128,7 +128,7 @@ func dfsDiffNode(n *DiffNode, doPrintPrivate bool, doPrintUnchanged bool, vis *m
 	}
 }
 
-func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
+func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
 	graphAst, _ := gographviz.ParseString(`digraph G {}`)
 	graph := gographviz.NewGraph()
 	if err := gographviz.Analyse(graphAst, graph); err != nil {
@@ -161,6 +161,9 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool) {
 	vis := make(map[*DiffNode]struct{})
 	for _, node := range g.Nodes {
 		if _, ok := vis[node]; !ok {
+			if node.GetPkgName() != pkg {
+				continue
+			}
 			if !doPrintPrivate && node.isPrivate() {
 				continue
 			}
