@@ -1,16 +1,13 @@
 package main
 
 import (
-	"flag"
-	"go/build"
-	"log"
-	"os"
-	"runtime"
-	"runtime/pprof"
-
 	"calldiff/common"
 	"calldiff/diff"
 	"calldiff/graph"
+	"flag"
+	"go/build"
+	"os"
+	"runtime"
 
 	"golang.org/x/tools/go/buildutil"
 )
@@ -32,13 +29,13 @@ func init() {
 }
 
 func main() {
-	cpuFile, err := os.Create("cpu_profile")
+	/*cpuFile, err := os.Create("cpu_profile")
 	if err != nil {
 		log.Fatal(err)
 	}
 	_ = pprof.StartCPUProfile(cpuFile) // 开始记录CPU数据
 	defer pprof.StopCPUProfile()       // 停止记录
-
+	*/
 	var diffOptions common.DiffOptions
 	flag.StringVar(&diffOptions.Url, "url", "", `Git repository address`)
 	flag.StringVar(&diffOptions.Dir, "dir", ".", `Repository path`)
@@ -56,6 +53,8 @@ func main() {
 		go graph.GetCallgraph(&diffOptions, i)
 	}
 	diffOptions.Wg.Wait()
+
+	//fmt.Println(len(diffOptions.Callgraph[0].Nodes))
 
 	diffGraph := diff.GetDiff(diffOptions.Callgraph[0], diffOptions.Callgraph[1])
 	diffGraph.OutputDiffGraph(diffOptions.PrintPrivate, diffOptions.PrintUnchanged, diffOptions.Pkg)

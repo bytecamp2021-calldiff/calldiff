@@ -40,41 +40,35 @@ func isEqual(n1 *Node, n2 *Node) bool {
 	return n1.hashNum == n2.hashNum
 }
 
-func input() (*Graph, *Graph) {
-	var g1 = new(Graph)
-	var g2 = new(Graph)
-	return g1, g2
-}
-
 //求图的交，方便求强连通
-func intersectGraph(g1 *Graph, g2 *Graph) *Graph {
-	var g3 = newGraphHelper()
+func intersectGraph(oldGraph *Graph, newGraph *Graph) *Graph {
+	var interGraph = newGraphHelper()
 	//构造出新的结点
-	for key, n2 := range g2.nodes {
-		if n1, ok := g1.nodes[key]; ok {
-			g3.nodes[key] = newNodeHelper()
-			g3.nodes[key].name = key
+	for key, n2 := range newGraph.nodes {
+		if n1, ok := oldGraph.nodes[key]; ok {
+			interGraph.nodes[key] = newNodeHelper()
+			interGraph.nodes[key].name = key
 			if n2.hashNum != n1.hashNum {
-				g3.nodes[key].isChanged = true //两hash值做差判断是否发生改变
+				interGraph.nodes[key].isChanged = true //两hash值做差判断是否发生改变
 			}
 		}
 	}
 	//把边加上
-	for key, n2 := range g2.nodes {
-		if n1, ok := g1.nodes[key]; ok {
+	for key, n2 := range newGraph.nodes {
+		if n1, ok := oldGraph.nodes[key]; ok {
 			for callname := range n2.calledge {
 				if _, ok := n1.calledge[callname]; ok {
-					g3.nodes[key].calledge[callname] = g3.nodes[callname]
+					interGraph.nodes[key].calledge[callname] = interGraph.nodes[callname]
 				}
 			}
 			for callname := range n2.callbyedge {
 				if _, ok := n1.callbyedge[callname]; ok {
-					g3.nodes[key].callbyedge[callname] = g3.nodes[callname]
+					interGraph.nodes[key].callbyedge[callname] = interGraph.nodes[callname]
 				}
 			}
 		}
 	}
-	return g3
+	return interGraph
 }
 
 func func2str(ssaFunction *ssa.Function) string {
