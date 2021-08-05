@@ -250,7 +250,8 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
       <tr><td align="right" port="i3">affected call</td></tr>
       <tr><td align="right" port="i4">unchanged</td></tr>
       </table>>`,
-		"shape": "plaintext",
+		"shape":    "plaintext",
+		"fontsize": "10",
 	})
 	_ = graph.AddNode(legendClusterName, "key2", map[string]string{
 		"label": `<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
@@ -259,7 +260,8 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
       <tr><td port="i3">&nbsp;</td></tr>
       <tr><td port="i4">&nbsp;</td></tr>
       </table>>`,
-		"shape": "plaintext",
+		"shape":    "plaintext",
+		"fontsize": "10",
 	})
 	_ = graph.AddNode(legendClusterName, "legend_removed_api__", map[string]string{
 		"label":     `"removed\napi"`,
@@ -267,6 +269,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 		"shape":     "oval",
 		"color":     lineColorMap[REMOVED],
 		"fillcolor": fillColorMap[REMOVED],
+		"fontsize":  "6",
 	})
 	_ = graph.AddNode(legendClusterName, "legend_new_api__", map[string]string{
 		"label":     `"inserted\napi"`,
@@ -274,6 +277,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 		"shape":     "oval",
 		"color":     lineColorMap[INSERTED],
 		"fillcolor": fillColorMap[INSERTED],
+		"fontsize":  "6",
 	})
 	_ = graph.AddNode(legendClusterName, "legend_affected_api__", map[string]string{
 		"label":     `"affected\napi"`,
@@ -281,6 +285,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 		"shape":     "oval",
 		"color":     lineColorMap[AFFECTED],
 		"fillcolor": fillColorMap[AFFECTED],
+		"fontsize":  "6",
 	})
 	_ = graph.AddNode(legendClusterName, "legend_unchanged_api__", map[string]string{
 		"label":     `"unchanged\napi"`,
@@ -288,6 +293,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 		"shape":     "oval",
 		"color":     lineColorMap[UNCHANGED],
 		"fillcolor": fillColorMap[UNCHANGED],
+		"fontsize":  "6",
 	})
 	_ = graph.AddNode(legendClusterName, "legend_changed_api__", map[string]string{
 		"label":     `"unchanged\napi"`,
@@ -295,6 +301,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 		"shape":     "oval",
 		"color":     lineColorMap[CHANGED],
 		"fillcolor": fillColorMap[CHANGED],
+		"fontsize":  "6",
 	})
 	_ = graph.AddNode(legendClusterName, "key:i1:e -> key2:i1:w", map[string]string{
 		"color": lineColorMap[REMOVED],
@@ -310,7 +317,7 @@ func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, f
 	})
 	_ = graph.AddNode(legendClusterName, "key:i4:e -> key2:i4:w", map[string]string{
 		"color": lineColorMap[UNCHANGED],
-		"style": lineColorMap[UNCHANGED],
+		"style": lineStyleMap[UNCHANGED],
 	})
 	_ = graph.AddNode(legendClusterName, "legend_removed_api__ -> legend_new_api__", map[string]string{
 		"style": "invis",
