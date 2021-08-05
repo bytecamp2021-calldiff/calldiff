@@ -106,6 +106,7 @@ func (g *DiffGraph) DebugDiffGraph() {
 func (g *DiffGraph) OutputDiffGraph(o *common.DiffOptions) {
 	//g.CalcAffected()  // 计算哪些节点是黄色节点/受影响节点
 	outputs := strings.Split(o.Output, ",")
+	_ = os.Mkdir("./output", os.ModePerm)
 	for _, output := range outputs {
 		switch output {
 		case "json":
@@ -223,7 +224,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	_ = os.Mkdir("./output", os.ModePerm)
+
 	err = ioutil.WriteFile("./output/difference.gv", []byte(graph.String()), 0644)
 	if err != nil {
 		return err
