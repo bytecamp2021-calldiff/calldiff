@@ -8,6 +8,7 @@ import (
 	"go/build"
 	"os"
 	"runtime"
+	"sync"
 
 	"golang.org/x/tools/go/buildutil"
 )
@@ -29,18 +30,20 @@ func init() {
 }
 
 func main() {
-	/*cpuFile, err := os.Create("cpu_profile")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_ = pprof.StartCPUProfile(cpuFile) // 开始记录CPU数据
-	defer pprof.StopCPUProfile()       // 停止记录
+	/*
+		cpuFile, err := os.Create("cpu_profile")
+		if err != nil {
+			log.Fatal(err)
+		}
+		_ = pprof.StartCPUProfile(cpuFile) // 开始记录CPU数据
+		defer pprof.StopCPUProfile()       // 停止记录
 	*/
 	var diffOptions common.DiffOptions
+	var source, target common.GraphOptions
 	flag.StringVar(&diffOptions.Url, "url", "", `Git repository address`)
 	flag.StringVar(&diffOptions.Dir, "dir", ".", `Repository path`)
-	flag.StringVar(&diffOptions.Commit[0], "old", "HEAD^", `Old commit ID`)
-	flag.StringVar(&diffOptions.Commit[1], "new", "HEAD", `New commit ID`)
+	flag.StringVar(&source.Commit, "old", "HEAD^", `Old commit ID`)
+	flag.StringVar(&target.Commit, "new", "HEAD", `New commit ID`)
 	flag.BoolVar(&diffOptions.Test, "test", false, `Loads test code (*_test.go) for imported packages`)
 	flag.BoolVar(&diffOptions.PrintPrivate, "private", false, `If output private function`)
 	flag.BoolVar(&diffOptions.PrintUnchanged, "unchanged", false, `If output unchanged function`)
@@ -49,14 +52,12 @@ func main() {
 	flag.Parse()
 
 	// Get commits' callgraph
-	for i := 0; i < 2; i++ {
-		diffOptions.Wg.Add(1)
-		go graph.GetCallgraph(&diffOptions, i)
-	}
-	diffOptions.Wg.Wait()
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go graph.GetCallgraph(&diffOptions, &source, &wg)
+	go graph.GetCallgraph(&diffOptions, &target, &wg)
+	wg.Wait()
 
-	//fmt.Println(len(diffOptions.CallGraph[0].Nodes))
-
-	diffGraph := analyze.GetDiff(diffOptions.CallGraph[0], diffOptions.CallGraph[1])
+	diffGraph := analyze.GetDiff(source.CallGraph, target.CallGraph)
 	diffGraph.OutputDiffGraph(&diffOptions)
 }

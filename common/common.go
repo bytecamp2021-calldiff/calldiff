@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"sync"
 
 	"golang.org/x/tools/go/callgraph"
 )
 
+type GraphOptions struct {
+	Commit    string
+	CallGraph *callgraph.Graph
+	TempPath  string
+}
+
 type DiffOptions struct {
 	Url            string
 	Dir            string
-	Commit         [2]string
 	Test           bool
-	Wg             sync.WaitGroup
-	CallGraph      [2]*callgraph.Graph
-	Path           [2]string
 	PrintPrivate   bool
 	PrintUnchanged bool
 	Pkg            string

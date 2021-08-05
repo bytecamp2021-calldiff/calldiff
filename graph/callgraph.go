@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"sync"
 	"unicode"
 
 	"golang.org/x/tools/go/callgraph"
@@ -16,12 +17,12 @@ import (
 	"golang.org/x/tools/go/ssa/ssautil"
 )
 
-func GetCallgraph(diffOptions *common.DiffOptions, i int) {
-	defer diffOptions.Wg.Done()
+func GetCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions, wg *sync.WaitGroup) {
+	defer wg.Done()
 
 	r := clone(diffOptions.Url, diffOptions.Dir)
 
-	commitHash := getCommitHash(r, diffOptions.Commit[i])
+	commitHash := getCommitHash(r, graphOptions.Commit)
 
 	path, err := ioutil.TempDir(diffOptions.Dir, "")
 	if err != nil {
@@ -29,16 +30,16 @@ func GetCallgraph(diffOptions *common.DiffOptions, i int) {
 		return
 	}
 
-	diffOptions.Path[i] = path
+	graphOptions.TempPath = path
 
-	defer os.RemoveAll(diffOptions.Path[i])
+	defer os.RemoveAll(graphOptions.TempPath)
 
-	if err := outputCommitFiles(commitHash, diffOptions.Path[i]); err != nil {
+	if err := outputCommitFiles(commitHash, graphOptions.TempPath); err != nil {
 		common.Error("%s", err)
 		return
 	}
 
-	if err := doCallgraph(diffOptions, i); err != nil {
+	if err := doCallgraph(diffOptions, graphOptions); err != nil {
 		common.Error("%s", err)
 		return
 	}
@@ -63,11 +64,13 @@ func getAllFunctions(s *ssa.Package) *[]*ssa.Function {
 	return &result
 }
 
-func doCallgraph(diffOptions *common.DiffOptions, i int) error {
+func doCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions) error {
 	cfg := &packages.Config{
-		Mode:  packages.LoadSyntax,
+		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
+			packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes |
+			packages.NeedSyntax | packages.NeedTypesInfo,
 		Tests: diffOptions.Test,
-		Dir:   diffOptions.Path[i],
+		Dir:   graphOptions.TempPath,
 	}
 	initial, err := packages.Load(cfg, "./...")
 	if err != nil {
@@ -101,11 +104,11 @@ func doCallgraph(diffOptions *common.DiffOptions, i int) error {
 		}
 	}
 	rtares := rta.Analyze(roots, true)
-	diffOptions.CallGraph[i] = rtares.CallGraph
+	graphOptions.CallGraph = rtares.CallGraph
 
 	// NB: RTA gives us Reachable and RuntimeTypes too.
 
-	diffOptions.CallGraph[i].DeleteSyntheticNodes()
+	graphOptions.CallGraph.DeleteSyntheticNodes()
 	return nil
 }
 
