@@ -75,6 +75,7 @@ type DiffGraph struct {
 	Nodes map[string]*DiffNode
 }
 
+//方便申请节点
 func NewDiffGraphHelper() *DiffGraph {
 	var ans = new(DiffGraph)
 	ans.Nodes = make(map[string]*DiffNode)
@@ -224,7 +225,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-
+	GenerateLegend(graph, lineColorMap, fillColorMap, lineStyleMap)
 	err = ioutil.WriteFile("./output/difference.gv", []byte(graph.String()), 0644)
 	if err != nil {
 		return err
@@ -234,6 +235,89 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 		return err
 	}
 	return nil
+}
+
+func GenerateLegend(graph *gographviz.Graph, lineColorMap map[DiffType]string, fillColorMap map[DiffType]string, lineStyleMap map[DiffType]string) {
+	legendClusterName := `cluster_legend__`
+	_ = graph.AddSubGraph("G", legendClusterName, map[string]string{
+		"rank":  "sink",
+		"label": `"Legend"`,
+	})
+	_ = graph.AddNode(legendClusterName, "key", map[string]string{
+		"label": `<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+      <tr><td align="right" port="i1">remove call</td></tr>
+      <tr><td align="right" port="i2">insert call</td></tr>
+      <tr><td align="right" port="i3">affected call</td></tr>
+      <tr><td align="right" port="i4">unchanged</td></tr>
+      </table>>`,
+		"shape": "plaintext",
+	})
+	_ = graph.AddNode(legendClusterName, "key2", map[string]string{
+		"label": `<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+      <tr><td port="i1">&nbsp;</td></tr>
+      <tr><td port="i2">&nbsp;</td></tr>
+      <tr><td port="i3">&nbsp;</td></tr>
+      <tr><td port="i4">&nbsp;</td></tr>
+      </table>>`,
+		"shape": "plaintext",
+	})
+	_ = graph.AddNode(legendClusterName, "legend_removed_api__", map[string]string{
+		"label":     `"removed\napi"`,
+		"style":     "filled",
+		"shape":     "oval",
+		"color":     lineColorMap[REMOVED],
+		"fillcolor": fillColorMap[REMOVED],
+	})
+	_ = graph.AddNode(legendClusterName, "legend_new_api__", map[string]string{
+		"label":     `"inserted\napi"`,
+		"style":     "filled",
+		"shape":     "oval",
+		"color":     lineColorMap[INSERTED],
+		"fillcolor": fillColorMap[INSERTED],
+	})
+	_ = graph.AddNode(legendClusterName, "legend_affected_api__", map[string]string{
+		"label":     `"affected\napi"`,
+		"style":     "filled",
+		"shape":     "oval",
+		"color":     lineColorMap[AFFECTED],
+		"fillcolor": fillColorMap[AFFECTED],
+	})
+	_ = graph.AddNode(legendClusterName, "legend_unchanged_api__", map[string]string{
+		"label":     `"unchanged\napi"`,
+		"style":     "filled",
+		"shape":     "oval",
+		"color":     lineColorMap[UNCHANGED],
+		"fillcolor": fillColorMap[UNCHANGED],
+	})
+	_ = graph.AddNode(legendClusterName, "legend_changed_api__", map[string]string{
+		"label":     `"unchanged\napi"`,
+		"style":     "filled",
+		"shape":     "oval",
+		"color":     lineColorMap[CHANGED],
+		"fillcolor": fillColorMap[CHANGED],
+	})
+	_ = graph.AddNode(legendClusterName, "key:i1:e -> key2:i1:w", map[string]string{
+		"color": lineColorMap[REMOVED],
+		"style": lineStyleMap[REMOVED],
+	})
+	_ = graph.AddNode(legendClusterName, "key:i2:e -> key2:i2:w", map[string]string{
+		"color": lineColorMap[INSERTED],
+		"style": lineStyleMap[INSERTED],
+	})
+	_ = graph.AddNode(legendClusterName, "key:i3:e -> key2:i3:w", map[string]string{
+		"color": lineColorMap[AFFECTED],
+		"style": lineStyleMap[AFFECTED],
+	})
+	_ = graph.AddNode(legendClusterName, "key:i4:e -> key2:i4:w", map[string]string{
+		"color": lineColorMap[UNCHANGED],
+		"style": lineColorMap[UNCHANGED],
+	})
+	_ = graph.AddNode(legendClusterName, "legend_removed_api__ -> legend_new_api__", map[string]string{
+		"style": "invis",
+	})
+	_ = graph.AddNode(legendClusterName, "legend_affected_api__ -> legend_changed_api__", map[string]string{
+		"style": "invis",
+	})
 }
 
 func execCommand(programName string, programArgs ...string) error {
