@@ -105,6 +105,4 @@ fabric.properties
 
 # Calldiff
 calldiff
-callgraph.gv
-callgraph.svg
 output/
