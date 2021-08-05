@@ -35,6 +35,10 @@ make build
 | unchanged | 输出差异时，是否输出未发生变化的函数            | false  |
 | pkg       | 输出差异时，输出指定包的差异情况                  | main   |
 
+## 图例
+
+<div style="text-align:center"><img src="docs/images/legend.svg" /></div>
+
 ## 样例
 
 ### Calldiff 项目
