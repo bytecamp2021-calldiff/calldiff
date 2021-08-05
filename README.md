@@ -5,7 +5,7 @@
 ## 编译
 
 ```bash
-go build -o calldiff main.go
+make build
 ```
 
 ## 运行
@@ -40,7 +40,7 @@ go build -o calldiff main.go
 ### Calldiff 项目
 
 ```bash
-./calldiff
+make run
 ```
 
 该命令输出当前目录下，HEAD^ 和 HEAD 两个 Commit 的函数调用关系图之间差异。
