@@ -67,7 +67,7 @@ func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg st
 	if err != nil {
 		return err
 	}
-	if err := ioutil.WriteFile("./output.json", marshal, fs.ModePerm); err != nil {
+	if err := ioutil.WriteFile("./output/difference.json", marshal, fs.ModePerm); err != nil {
 		return err
 	}
 	return nil

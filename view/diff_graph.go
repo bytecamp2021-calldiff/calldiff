@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -226,11 +227,12 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	err = ioutil.WriteFile("./callgraph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
+	os.Mkdir("./output", os.ModePerm)
+	err = ioutil.WriteFile("./output/difference.gv", []byte(graph.String()), 0644)
 	if err != nil {
 		return err
 	}
-	err = execCommand(`dot`, "./callgraph.gv", "-Tsvg", "-o", "./callgraph.svg")
+	err = execCommand(`dot`, "./output/difference.gv", "-Tsvg", "-o", "./output/difference.svg")
 	if err != nil {
 		return err
 	}
