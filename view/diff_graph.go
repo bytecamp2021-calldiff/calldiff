@@ -3,6 +3,7 @@ package view
 import (
 	"calldiff/common"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -24,10 +25,6 @@ const (
 	AFFECTED         // 传播中受到了影响
 )
 
-//type DiffEdge struct {
-//	Node  *DiffNode //连接的点
-//	Difference int       //0表示不变，1新增，2删除，3改变
-//}
 type DiffEdge struct {
 	Node       *DiffNode //连接的点
 	Difference DiffType
@@ -78,7 +75,6 @@ type DiffGraph struct {
 	Nodes map[string]*DiffNode
 }
 
-//方便申请节点
 func NewDiffGraphHelper() *DiffGraph {
 	var ans = new(DiffGraph)
 	ans.Nodes = make(map[string]*DiffNode)
@@ -227,7 +223,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	os.Mkdir("./output", os.ModePerm)
+	_ = os.Mkdir("./output", os.ModePerm)
 	err = ioutil.WriteFile("./output/difference.gv", []byte(graph.String()), 0644)
 	if err != nil {
 		return err
@@ -246,8 +242,12 @@ func execCommand(programName string, programArgs ...string) error {
 	if err != nil {
 		return err
 	}
-	defer stdout.Close()
-	defer stderr.Close()
+	defer func(stdout io.ReadCloser) {
+		_ = stdout.Close()
+	}(stdout)
+	defer func(stderr io.ReadCloser) {
+		_ = stderr.Close()
+	}(stderr)
 	if err := cmd.Start(); err != nil { // 运行命令
 		return err
 	}
