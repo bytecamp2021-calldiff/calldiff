@@ -13,8 +13,8 @@ func makeTestGraph(n []int, e [][]int, h []int, g *Graph) {
 		g.nodes[name[v]].name = name[v]
 	}
 	for _, v := range e {
-		g.nodes[name[v[0]]].callbyedge[name[v[1]]] = g.nodes[name[v[1]]]
-		g.nodes[name[v[1]]].calledge[name[v[0]]] = g.nodes[name[v[0]]]
+		g.nodes[name[v[0]]].callByEdge[name[v[1]]] = g.nodes[name[v[1]]]
+		g.nodes[name[v[1]]].callEdge[name[v[0]]] = g.nodes[name[v[0]]]
 	}
 	for _, v := range h {
 		g.nodes[name[v]].isChanged = true

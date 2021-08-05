@@ -17,7 +17,7 @@ import (
 	"golang.org/x/tools/go/ssa/ssautil"
 )
 
-func GetCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions, wg *sync.WaitGroup) {
+func GetCallGraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	r := clone(diffOptions.Url, diffOptions.Dir)
@@ -41,7 +41,7 @@ func GetCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOpt
 		return
 	}
 
-	if err := doCallgraph(diffOptions, graphOptions); err != nil {
+	if err := doCallGraph(diffOptions, graphOptions); err != nil {
 		common.Error("%s", err)
 		return
 	}
@@ -66,7 +66,7 @@ func getAllFunctions(s *ssa.Package) *[]*ssa.Function {
 	return &result
 }
 
-func doCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions) error {
+func doCallGraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions) error {
 	cfg := &packages.Config{
 		Mode: packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
 			packages.NeedImports | packages.NeedTypes | packages.NeedTypesSizes |

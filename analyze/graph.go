@@ -15,8 +15,8 @@ type Node struct {
 	name       string           //函数的名称
 	hashNum    [32]byte         //代码部分求hash过后的值,在两图的交集中0表示两图hashNum一样，否则不一样
 	isChanged  bool             //判断有无改变
-	callbyedge map[string]*Node //指向所有被调用的函数（即a调用b，b向a连边）
-	calledge   map[string]*Node //所有调用边
+	callByEdge map[string]*Node //指向所有被调用的函数（即a调用b，b向a连边）
+	callEdge   map[string]*Node //所有调用边
 }
 
 type Graph struct {
@@ -31,8 +31,8 @@ func newGraphHelper() *Graph {
 
 func newNodeHelper() *Node {
 	var n = new(Node)
-	n.callbyedge = make(map[string]*Node)
-	n.calledge = make(map[string]*Node)
+	n.callByEdge = make(map[string]*Node)
+	n.callEdge = make(map[string]*Node)
 	return n
 }
 
@@ -56,14 +56,14 @@ func intersectGraph(oldGraph *Graph, newGraph *Graph) *Graph {
 	//把边加上
 	for key, n2 := range newGraph.nodes {
 		if n1, ok := oldGraph.nodes[key]; ok {
-			for callname := range n2.calledge {
-				if _, ok := n1.calledge[callname]; ok {
-					interGraph.nodes[key].calledge[callname] = interGraph.nodes[callname]
+			for callName := range n2.callEdge {
+				if _, ok := n1.callEdge[callName]; ok {
+					interGraph.nodes[key].callEdge[callName] = interGraph.nodes[callName]
 				}
 			}
-			for callname := range n2.callbyedge {
-				if _, ok := n1.callbyedge[callname]; ok {
-					interGraph.nodes[key].callbyedge[callname] = interGraph.nodes[callname]
+			for callName := range n2.callByEdge {
+				if _, ok := n1.callByEdge[callName]; ok {
+					interGraph.nodes[key].callByEdge[callName] = interGraph.nodes[callName]
 				}
 			}
 		}
@@ -104,7 +104,7 @@ func getFuncHash(ssaFunction *ssa.Function) [32]byte {
 	return sha256.Sum256([]byte(resultString))
 }
 
-func callgraph2graph(cg *callgraph.Graph) *Graph {
+func callGraph2graph(cg *callgraph.Graph) *Graph {
 	var g = newGraphHelper()
 	nodeMap := make(map[*callgraph.Node]struct{})
 	for key, value := range cg.Nodes {
@@ -119,22 +119,10 @@ func callgraph2graph(cg *callgraph.Graph) *Graph {
 			if _, ok := nodeMap[edge.Callee]; ok {
 				calleeName := func2str(edge.Callee.Func)
 				callerName := func2str(edge.Caller.Func)
-				g.nodes[callerName].calledge[calleeName] = g.nodes[calleeName]
-				g.nodes[calleeName].callbyedge[callerName] = g.nodes[callerName]
+				g.nodes[callerName].callEdge[calleeName] = g.nodes[calleeName]
+				g.nodes[calleeName].callByEdge[callerName] = g.nodes[callerName]
 			}
 		}
 	}
-	/*
-		callgraph.GraphVisitEdges(cg, func(edge *callgraph.Edge) error {
-			if inStd(edge.Caller) || inStd(edge.Callee) {
-				return nil
-			}
-			calleeName := func2str(edge.Callee.Func)
-			callerName := func2str(edge.Caller.Func)
-			g.nodes[callerName].calledge[calleeName] = g.nodes[calleeName]
-			g.nodes[calleeName].callbyedge[callerName] = g.nodes[callerName]
-			return nil
-		})
-	*/
 	return g
 }

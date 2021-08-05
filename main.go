@@ -54,8 +54,8 @@ func main() {
 	// Get commits' callgraph
 	var wg sync.WaitGroup
 	wg.Add(2)
-	go graph.GetCallgraph(&diffOptions, &source, &wg)
-	go graph.GetCallgraph(&diffOptions, &target, &wg)
+	go graph.GetCallGraph(&diffOptions, &source, &wg)
+	go graph.GetCallGraph(&diffOptions, &target, &wg)
 	wg.Wait()
 
 	diffGraph := analyze.GetDiff(source.CallGraph, target.CallGraph)

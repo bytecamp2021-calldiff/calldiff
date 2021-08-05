@@ -38,12 +38,12 @@ func makeSameEdge(oldGraph *Graph, newGraph *Graph, diffGraph *view.DiffGraph) {
 	var sccGraph = makeSccGraph(interGraph)
 	//按分量影响到每个实际的node
 	for key, value := range interGraph.nodes {
-		for callname := range value.calledge {
-			diffGraph.Nodes[key].CallEdge[callname] = view.NewDiffEdgeHelper(diffGraph.Nodes[callname])
-			if sccGraph.belongs[callname].isChanged {
-				diffGraph.Nodes[key].CallEdge[callname].Difference = view.CHANGED
+		for callName := range value.callEdge {
+			diffGraph.Nodes[key].CallEdge[callName] = view.NewDiffEdgeHelper(diffGraph.Nodes[callName])
+			if sccGraph.belongs[callName].isChanged {
+				diffGraph.Nodes[key].CallEdge[callName].Difference = view.CHANGED
 			} else {
-				diffGraph.Nodes[key].CallEdge[callname].Difference = view.UNCHANGED
+				diffGraph.Nodes[key].CallEdge[callName].Difference = view.UNCHANGED
 			}
 		}
 	}
@@ -54,26 +54,26 @@ func makeDiffEdge(oldGraph *Graph, newGraph *Graph, diffGraph *view.DiffGraph) {
 	for key, value := range diffGraph.Nodes {
 		if value.Difference == view.UNCHANGED || value.Difference == view.CHANGED {
 			//添加新增的调用
-			for callname := range newGraph.nodes[key].calledge {
-				if _, ok := oldGraph.nodes[key].calledge[callname]; !ok {
-					value.CallEdge[callname] = view.NewDiffEdgeHelper(diffGraph.Nodes[callname])
-					value.CallEdge[callname].Difference = view.INSERTED
+			for callName := range newGraph.nodes[key].callEdge {
+				if _, ok := oldGraph.nodes[key].callEdge[callName]; !ok {
+					value.CallEdge[callName] = view.NewDiffEdgeHelper(diffGraph.Nodes[callName])
+					value.CallEdge[callName].Difference = view.INSERTED
 				}
 			}
 			//添加删去的调用
-			for callname := range oldGraph.nodes[key].calledge {
-				if _, ok := newGraph.nodes[key].calledge[callname]; !ok {
-					value.CallEdge[callname] = view.NewDiffEdgeHelper(diffGraph.Nodes[callname])
-					value.CallEdge[callname].Difference = view.REMOVED
+			for callName := range oldGraph.nodes[key].callEdge {
+				if _, ok := newGraph.nodes[key].callEdge[callName]; !ok {
+					value.CallEdge[callName] = view.NewDiffEdgeHelper(diffGraph.Nodes[callName])
+					value.CallEdge[callName].Difference = view.REMOVED
 				}
 			}
 		} else if value.Difference == view.INSERTED {
-			for callname := range newGraph.nodes[key].calledge {
-				value.CallEdge[callname] = view.NewDiffEdgeHelper(diffGraph.Nodes[callname])
-				value.CallEdge[callname].Difference = view.INSERTED
+			for callName := range newGraph.nodes[key].callEdge {
+				value.CallEdge[callName] = view.NewDiffEdgeHelper(diffGraph.Nodes[callName])
+				value.CallEdge[callName].Difference = view.INSERTED
 			}
 		} else if value.Difference == view.REMOVED {
-			for callName := range oldGraph.nodes[key].calledge {
+			for callName := range oldGraph.nodes[key].callEdge {
 				value.CallEdge[callName] = view.NewDiffEdgeHelper(diffGraph.Nodes[callName])
 				value.CallEdge[callName].Difference = view.REMOVED
 			}
@@ -81,9 +81,9 @@ func makeDiffEdge(oldGraph *Graph, newGraph *Graph, diffGraph *view.DiffGraph) {
 	}
 }
 
-func GetDiff(oldCallgraph *callgraph.Graph, newCallgraph *callgraph.Graph) *view.DiffGraph {
-	var oldGraph = callgraph2graph(oldCallgraph)
-	var newGraph = callgraph2graph(newCallgraph)
+func GetDiff(oldCallGraph *callgraph.Graph, newCallGraph *callgraph.Graph) *view.DiffGraph {
+	var oldGraph = callGraph2graph(oldCallGraph)
+	var newGraph = callGraph2graph(newCallGraph)
 	var diffGraph = view.NewDiffGraphHelper()
 	makeDiffNode(oldGraph, newGraph, diffGraph)
 	makeSameEdge(oldGraph, newGraph, diffGraph)

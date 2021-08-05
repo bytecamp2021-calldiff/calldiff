@@ -4,11 +4,11 @@ package analyze
 type Component struct {
 	id         int //用以区别不同的强连通分量
 	member     []*Node
-	callbyedge map[int]*Component //指向所有被调用的函数（即a调用b，b向a连边）
-	calledge   map[int]*Component //所有调用边
+	callByEdge map[int]*Component //指向所有被调用的函数（即a调用b，b向a连边）
+	callEdge   map[int]*Component //所有调用边
 
 	//以下用以过程中计算
-	callnum   int  //调用的函数数
+	callNum   int  //调用的函数数
 	isChanged bool //调用的函数中有无发生改变的
 }
 
@@ -20,8 +20,8 @@ type ComponentGraph struct {
 func newComponentHelper(id int) *Component {
 	var c = new(Component)
 	c.id = id
-	c.callbyedge = make(map[int]*Component)
-	c.calledge = make(map[int]*Component)
+	c.callByEdge = make(map[int]*Component)
+	c.callEdge = make(map[int]*Component)
 	return c
 }
 
@@ -36,7 +36,7 @@ func (cg *ComponentGraph) traverse() {
 	var queue []int
 	//找出调用次数为0的分量
 	for _, com := range cg.nodes {
-		if com.callnum == 0 {
+		if com.callNum == 0 {
 			queue = append(queue, com.id)
 		}
 	}
@@ -45,12 +45,12 @@ func (cg *ComponentGraph) traverse() {
 		id := queue[0]
 		queue = queue[1:]
 		com := cg.nodes[id]
-		for key, value := range com.callbyedge {
+		for key, value := range com.callByEdge {
 			if com.isChanged {
 				value.isChanged = true
 			}
-			value.callnum--
-			if value.callnum == 0 {
+			value.callNum--
+			if value.callNum == 0 {
 				queue = append(queue, key)
 			}
 		}
@@ -61,25 +61,25 @@ func (cg *ComponentGraph) traverse() {
 func makeSccGraph(g *Graph) *ComponentGraph {
 	var cg = makeSccNodes(g)
 	for _, com := range cg.nodes {
-		com.callnum = 0
+		com.callNum = 0
 		com.isChanged = false
 		for _, mem := range com.member {
 			//标志是否发生改变
 			if mem.isChanged {
 				com.isChanged = true
 			}
-			for callname := range mem.calledge {
-				if cg.belongs[callname].id == com.id {
+			for callName := range mem.callEdge {
+				if cg.belongs[callName].id == com.id {
 					continue
 				}
-				(*com).calledge[cg.belongs[callname].id] = cg.belongs[callname]
-				com.callnum++
+				(*com).callEdge[cg.belongs[callName].id] = cg.belongs[callName]
+				com.callNum++
 			}
-			for callname := range mem.callbyedge {
-				if cg.belongs[callname].id == com.id {
+			for callName := range mem.callByEdge {
+				if cg.belongs[callName].id == com.id {
 					continue
 				}
-				(*com).callbyedge[cg.belongs[callname].id] = cg.belongs[callname]
+				(*com).callByEdge[cg.belongs[callName].id] = cg.belongs[callName]
 			}
 		}
 	}
@@ -116,7 +116,7 @@ func makeSccNodes(g *Graph) *ComponentGraph {
 //求强连通分量，正向dfs
 func dfs1(n *Node, vis *map[string]bool, vs *[]*Node) {
 	(*vis)[n.name] = true
-	for key, value := range n.calledge {
+	for key, value := range n.callEdge {
 		if _, ok := (*vis)[key]; !ok {
 			dfs1(value, vis, vs)
 		}
@@ -128,7 +128,7 @@ func dfs1(n *Node, vis *map[string]bool, vs *[]*Node) {
 func dfs2(n *Node, com *Component, belongs *map[string]*Component) {
 	(*belongs)[n.name] = com
 	com.member = append(com.member, n)
-	for key, value := range n.callbyedge {
+	for key, value := range n.callByEdge {
 		if _, ok := (*belongs)[key]; !ok {
 			dfs2(value, com, belongs)
 		}

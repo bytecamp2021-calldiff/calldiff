@@ -98,14 +98,13 @@ func NewDiffEdgeHelper(n *DiffNode) *DiffEdge {
 func (g *DiffGraph) DebugDiffGraph() {
 	for key, value := range g.Nodes {
 		fmt.Println(key)
-		for callname := range value.CallEdge {
-			fmt.Println("..", callname)
+		for callName := range value.CallEdge {
+			fmt.Println("..", callName)
 		}
 	}
 }
 
 func (g *DiffGraph) OutputDiffGraph(o *common.DiffOptions) {
-	//g.CalcAffected()  // 计算哪些节点是黄色节点/受影响节点
 	outputs := strings.Split(o.Output, ",")
 	_ = os.Mkdir("./output", os.ModePerm)
 	for _, output := range outputs {
@@ -119,7 +118,7 @@ func (g *DiffGraph) OutputDiffGraph(o *common.DiffOptions) {
 			err := g.Visualization(o.PrintPrivate, o.PrintUnchanged, o.Pkg)
 			if err != nil {
 				fmt.Println(err)
-			} // graphviz 可视化
+			}
 		default:
 			fmt.Println("Unsupported output type", output)
 		}
