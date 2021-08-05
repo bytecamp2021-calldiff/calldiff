@@ -2,7 +2,7 @@
 
 BIN_FILE=calldiff
 
-all: check build run
+all: check build
 
 build:
 	@go build -o "${BIN_FILE}"

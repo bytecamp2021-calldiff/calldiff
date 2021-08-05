@@ -5,7 +5,7 @@
 ## 编译
 
 ```bash
-go build -o calldiff main.go
+make build
 ```
 
 ## 运行
@@ -35,12 +35,16 @@ go build -o calldiff main.go
 | unchanged | 输出差异时，是否输出未发生变化的函数            | false  |
 | pkg       | 输出差异时，输出指定包的差异情况                  | main   |
 
+## 图例
+
+<div style="text-align:center"><img src="docs/images/legend.svg" /></div>
+
 ## 样例
 
 ### Calldiff 项目
 
 ```bash
-./calldiff
+make run
 ```
 
 该命令输出当前目录下，HEAD^ 和 HEAD 两个 Commit 的函数调用关系图之间差异。
