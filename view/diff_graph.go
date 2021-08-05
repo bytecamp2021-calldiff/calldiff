@@ -1,6 +1,7 @@
 package view
 
 import (
+	"calldiff/common"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -105,10 +106,25 @@ func (g *DiffGraph) DebugDiffGraph() {
 	}
 }
 
-func (g *DiffGraph) OutputDiffGraph(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
+func (g *DiffGraph) OutputDiffGraph(o *common.DiffOptions) {
 	//g.CalcAffected()  // 计算哪些节点是黄色节点/受影响节点
-	g.Visualization(doPrintPrivate, doPrintUnchanged, pkg) // graphviz 可视化
-	OutputJson(g, doPrintPrivate, doPrintUnchanged, pkg)
+	outputs := strings.Split(o.Output, ",")
+	for _, output := range outputs {
+		switch output {
+		case "json":
+			err := OutputJson(g, o.PrintPrivate, o.PrintUnchanged, o.Pkg)
+			if err != nil {
+				fmt.Println(err)
+			}
+		case "graphviz":
+			err := g.Visualization(o.PrintPrivate, o.PrintUnchanged, o.Pkg)
+			if err != nil {
+				fmt.Println(err)
+			} // graphviz 可视化
+		default:
+			fmt.Println("Unsupported output type", output)
+		}
+	}
 }
 
 func dfsDiffNode(n *DiffNode, doPrintPrivate bool, doPrintUnchanged bool, vis *map[*DiffNode]struct{}) {
@@ -127,13 +143,16 @@ func dfsDiffNode(n *DiffNode, doPrintPrivate bool, doPrintUnchanged bool, vis *m
 	}
 }
 
-func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pkg string) {
+func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pkg string) error {
 	graphAst, _ := gographviz.ParseString(`digraph G {}`)
 	graph := gographviz.NewGraph()
 	if err := gographviz.Analyse(graphAst, graph); err != nil {
-		panic(err)
+		return err
 	}
-	_ = graph.AddAttr("G", "rankdir", `"LR"`)
+	err := graph.AddAttr("G", "rankdir", `"LR"`)
+	if err != nil {
+		return err
+	}
 	// 定义属性
 	lineColorMap := map[DiffType]string{
 		UNCHANGED: "\"#000000\"",
@@ -207,27 +226,31 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	err := ioutil.WriteFile("./callgraph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
+	err = ioutil.WriteFile("./callgraph.gv", []byte(graph.String()), 0644) // todo 输出路径要能自定义
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	execCommand(`dot`, "./callgraph.gv", "-Tsvg", "-o", "./callgraph.svg")
+	err = execCommand(`dot`, "./callgraph.gv", "-Tsvg", "-o", "./callgraph.svg")
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func execCommand(programName string, programArgs ...string) {
+func execCommand(programName string, programArgs ...string) error {
 	cmd := exec.Command(programName, programArgs...)
 	stdout, err := cmd.StdoutPipe()
 	stderr, _ := cmd.StderrPipe()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer stdout.Close()
 	defer stderr.Close()
 	if err := cmd.Start(); err != nil { // 运行命令
-		log.Fatal(err)
+		return err
 	}
 	if opBytes, err := ioutil.ReadAll(stdout); err != nil { // 读取输出结果
-		log.Fatal(err)
+		return err
 	} else {
 		if len(opBytes) >= 2 {
 			log.Println(string(opBytes))
@@ -240,6 +263,7 @@ func execCommand(programName string, programArgs ...string) {
 			log.Println(string(opBytes))
 		}
 	}
+	return nil
 }
 
 func (g *DiffGraph) CalcAffected() {

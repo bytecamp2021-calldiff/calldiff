@@ -44,6 +44,7 @@ func main() {
 	flag.BoolVar(&diffOptions.Test, "test", false, `Loads test code (*_test.go) for imported packages`)
 	flag.BoolVar(&diffOptions.PrintPrivate, "private", false, `If output private function`)
 	flag.BoolVar(&diffOptions.PrintUnchanged, "unchanged", false, `If output unchanged function`)
+	flag.StringVar(&diffOptions.Output, "output", "json,graphviz", `Supported output types are json and graphviz`)
 	flag.StringVar(&diffOptions.Pkg, "pkg", "main", `Analyse which packages`)
 	flag.Parse()
 
@@ -57,5 +58,5 @@ func main() {
 	//fmt.Println(len(diffOptions.CallGraph[0].Nodes))
 
 	diffGraph := analyze.GetDiff(diffOptions.CallGraph[0], diffOptions.CallGraph[1])
-	diffGraph.OutputDiffGraph(diffOptions.PrintPrivate, diffOptions.PrintUnchanged, diffOptions.Pkg)
+	diffGraph.OutputDiffGraph(&diffOptions)
 }

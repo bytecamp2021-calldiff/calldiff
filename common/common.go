@@ -20,6 +20,7 @@ type DiffOptions struct {
 	PrintPrivate   bool
 	PrintUnchanged bool
 	Pkg            string
+	Output         string
 }
 
 // CheckArgs should be used to ensure the right command line arguments are
