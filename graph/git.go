@@ -35,19 +35,6 @@ func clone(url, dir string) *git.Repository {
 	}
 }
 
-// Checkout dir to a specific commit
-func checkout(r *git.Repository, commit string) {
-	w, err := r.Worktree()
-	common.CheckIfError(err)
-
-	// ... checking out to commit
-	common.Info("git checkout %s", commit)
-	err = w.Checkout(&git.CheckoutOptions{
-		Hash: plumbing.NewHash(commit),
-	})
-	common.CheckIfError(err)
-}
-
 func getCommitHash(r *git.Repository, s string) *object.Commit {
 	var hash plumbing.Hash
 	head, err := r.Head()

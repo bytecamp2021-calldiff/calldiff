@@ -32,7 +32,9 @@ func GetCallgraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOpt
 
 	graphOptions.TempPath = path
 
-	defer os.RemoveAll(graphOptions.TempPath)
+	defer func(path string) {
+		_ = os.RemoveAll(path)
+	}(graphOptions.TempPath)
 
 	if err := outputCommitFiles(commitHash, graphOptions.TempPath); err != nil {
 		common.Error("%s", err)

@@ -34,7 +34,7 @@ var args = map[string][]string{
 
 var ignored = map[string]bool{}
 
-var tempFolders = []string{}
+var tempFolders []string
 
 func TestExamples(t *testing.T) {
 	flag.Parse()

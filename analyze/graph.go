@@ -114,7 +114,7 @@ func callgraph2graph(cg *callgraph.Graph) *Graph {
 		g.nodes[s].name = s
 		g.nodes[s].hashNum = getFuncHash(key)
 	}
-	for node, _ := range nodeMap {
+	for node := range nodeMap {
 		for _, edge := range node.Out {
 			if _, ok := nodeMap[edge.Callee]; ok {
 				calleeName := func2str(edge.Callee.Func)

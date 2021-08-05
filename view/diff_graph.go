@@ -75,7 +75,7 @@ type DiffGraph struct {
 	Nodes map[string]*DiffNode
 }
 
-//方便申请节点
+// NewDiffGraphHelper 方便申请节点
 func NewDiffGraphHelper() *DiffGraph {
 	var ans = new(DiffGraph)
 	ans.Nodes = make(map[string]*DiffNode)
@@ -225,7 +225,7 @@ func (g *DiffGraph) Visualization(doPrintPrivate bool, doPrintUnchanged bool, pk
 			})
 		}
 	}
-	GenerateLegend(graph, lineColorMap, fillColorMap, lineStyleMap)
+	// GenerateLegend(graph, lineColorMap, fillColorMap, lineStyleMap)
 	err = ioutil.WriteFile("./output/difference.gv", []byte(graph.String()), 0644)
 	if err != nil {
 		return err
