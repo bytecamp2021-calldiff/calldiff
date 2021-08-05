@@ -101,7 +101,6 @@ func doCallGraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOpti
 			}
 			if diffOptions.PrintPrivate || isPublic(ssaFunc) {
 				roots = append(roots, ssaFunc)
-				//fmt.Println("name:", ssaFunc.Pkg.Pkg.Name(), ssaFunc.Name())
 			}
 		}
 	}

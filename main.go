@@ -30,14 +30,6 @@ func init() {
 }
 
 func main() {
-	/*
-		cpuFile, err := os.Create("cpu_profile")
-		if err != nil {
-			log.Fatal(err)
-		}
-		_ = pprof.StartCPUProfile(cpuFile) // 开始记录CPU数据
-		defer pprof.StopCPUProfile()       // 停止记录
-	*/
 	var diffOptions common.DiffOptions
 	var source, target common.GraphOptions
 	flag.StringVar(&diffOptions.Url, "url", "", `Git repository address`)

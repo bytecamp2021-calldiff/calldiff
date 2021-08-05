@@ -74,11 +74,9 @@ func intersectGraph(oldGraph *Graph, newGraph *Graph) *Graph {
 func func2str(ssaFunction *ssa.Function) string {
 	var result string
 	result = fmt.Sprintf("%v#%v#%v#", ssaFunction.Pkg.Pkg.Path(), ssaFunction.Pkg.Pkg.Name(), ssaFunction.Name()) // 包名#函数名
-	// fmt.Println("xxx",result)
 	if ssaFunction.Signature.Recv() != nil {
 		var buf bytes.Buffer
 		types.WriteType(&buf, ssaFunction.Signature.Recv().Type(), nil)
-		// fmt.Println(buf.String())
 		result += buf.String()
 	}
 	return result
@@ -100,7 +98,6 @@ func getFuncHash(ssaFunction *ssa.Function) [32]byte {
 			resultString += line
 		}
 	}
-	// fmt.Println(resultString)
 	return sha256.Sum256([]byte(resultString))
 }
 
