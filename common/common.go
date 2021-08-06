@@ -8,14 +8,16 @@ import (
 	"golang.org/x/tools/go/callgraph"
 )
 
+// GraphOptions 函数调用图相关选项
 type GraphOptions struct {
 	Commit    string
 	CallGraph *callgraph.Graph
 	TempPath  string
 }
 
+// DiffOptions 差异输出相关选项
 type DiffOptions struct {
-	Url            string
+	URL            string
 	Dir            string
 	Test           bool
 	PrintPrivate   bool

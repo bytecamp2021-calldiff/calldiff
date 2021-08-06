@@ -27,12 +27,12 @@ func clone(url, dir string) *git.Repository {
 		common.CheckIfError(err)
 
 		return r
-	} else {
-		r, err := git.PlainOpen(dir)
-		common.CheckIfError(err)
-
-		return r
 	}
+
+	r, err := git.PlainOpen(dir)
+	common.CheckIfError(err)
+
+	return r
 }
 
 func getCommitHash(r *git.Repository, s string) *object.Commit {

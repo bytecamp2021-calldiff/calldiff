@@ -2,6 +2,7 @@ package analyze
 
 import (
 	"calldiff/view"
+
 	"golang.org/x/tools/go/callgraph"
 )
 
@@ -81,6 +82,7 @@ func makeDiffEdge(oldGraph *Graph, newGraph *Graph, diffGraph *view.DiffGraph) {
 	}
 }
 
+// GetDiff 找到两幅图的差异
 func GetDiff(oldCallGraph *callgraph.Graph, newCallGraph *callgraph.Graph) *view.DiffGraph {
 	var oldGraph = callGraph2graph(oldCallGraph)
 	var newGraph = callGraph2graph(newCallGraph)

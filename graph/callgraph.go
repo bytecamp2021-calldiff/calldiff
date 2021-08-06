@@ -20,7 +20,7 @@ import (
 func GetCallGraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	r := clone(diffOptions.Url, diffOptions.Dir)
+	r := clone(diffOptions.URL, diffOptions.Dir)
 
 	commitHash := getCommitHash(r, graphOptions.Commit)
 

@@ -32,7 +32,7 @@ func init() {
 func main() {
 	var diffOptions common.DiffOptions
 	var source, target common.GraphOptions
-	flag.StringVar(&diffOptions.Url, "url", "", `Git repository address`)
+	flag.StringVar(&diffOptions.URL, "url", "", `Git repository address`)
 	flag.StringVar(&diffOptions.Dir, "dir", ".", `Repository path`)
 	flag.StringVar(&source.Commit, "old", "HEAD^", `Old commit ID`)
 	flag.StringVar(&target.Commit, "new", "HEAD", `New commit ID`)

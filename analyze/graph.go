@@ -11,6 +11,7 @@ import (
 	"golang.org/x/tools/go/ssa"
 )
 
+// Node 函数调用图中的函数节点
 type Node struct {
 	name       string           //函数的名称
 	hashNum    [32]byte         //代码部分求hash过后的值,在两图的交集中0表示两图hashNum一样，否则不一样
@@ -19,6 +20,7 @@ type Node struct {
 	callEdge   map[string]*Node //所有调用边
 }
 
+// Graph 函数调用图
 type Graph struct {
 	nodes map[string]*Node
 }

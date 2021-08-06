@@ -13,13 +13,13 @@ type Output struct {
 }
 
 type changeList struct {
-	Modified  []modifiedApi `json:"modified"`
+	Modified  []modifiedAPI `json:"modified"`
 	New       []string      `json:"new"`
 	Deleted   []string      `json:"deleted"`
 	Unchanged []string      `json:"unchanged"`
 }
 
-type modifiedApi struct {
+type modifiedAPI struct {
 	Name         string         `json:"name"`
 	AddedCall    []string       `json:"added_call"`
 	DeletedCall  []string       `json:"deleted_call"`
@@ -32,7 +32,7 @@ type affectedCall struct {
 	AffectedBy []string `json:"affected_by"`
 }
 
-func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg string) error {
+func OutputJSON(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg string) error {
 	var o Output
 	o.Pkg = pkg
 	for _, node := range g.Nodes {
@@ -73,7 +73,7 @@ func OutputJson(g *DiffGraph, doPrintPrivate bool, doPrintUnchanged bool, pkg st
 	return nil
 }
 
-func getModificationDetail(g *DiffGraph, node *DiffNode) (result modifiedApi) {
+func getModificationDetail(g *DiffGraph, node *DiffNode) (result modifiedAPI) {
 	result.Name = node.GetPrettyName()
 	if node.Difference == CHANGED {
 		result.AstChanged = true

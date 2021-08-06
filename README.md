@@ -99,7 +99,8 @@ make run
 ```bash
 ./calldiff \
     --url=https://github.com/dragonflyoss/Dragonfly.git \
-    --dir=./Dragonfly \ --old=7856ccdbb1e91bf2fefdc32e030780224f68e4be \
+    --dir=./Dragonfly \
+    --old=7856ccdbb1e91bf2fefdc32e030780224f68e4be \
     --pkg=algorithm \
     --test=true
 ```

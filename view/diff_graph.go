@@ -56,9 +56,8 @@ func (n *DiffNode) GetFuncName() string {
 	splits := strings.Split(n.Name, "#")
 	if len(splits[3]) == 0 {
 		return splits[2]
-	} else {
-		return fmt.Sprintf("(%s)%s", splits[3], splits[2])
 	}
+	return fmt.Sprintf("(%s)%s", splits[3], splits[2])
 }
 
 func (n *DiffNode) IsPrivate() bool {
@@ -110,7 +109,7 @@ func (g *DiffGraph) OutputDiffGraph(o *common.DiffOptions) {
 	for _, output := range outputs {
 		switch output {
 		case "json":
-			err := OutputJson(g, o.PrintPrivate, o.PrintUnchanged, o.Pkg)
+			err := OutputJSON(g, o.PrintPrivate, o.PrintUnchanged, o.Pkg)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -342,12 +341,12 @@ func execCommand(programName string, programArgs ...string) error {
 	if err := cmd.Start(); err != nil { // 运行命令
 		return err
 	}
-	if opBytes, err := ioutil.ReadAll(stdout); err != nil { // 读取输出结果
+	opBytes, err := ioutil.ReadAll(stdout)
+	if err != nil { // 读取输出结果
 		return err
-	} else {
-		if len(opBytes) >= 2 {
-			log.Println(string(opBytes))
-		}
+	}
+	if len(opBytes) >= 2 {
+		log.Println(string(opBytes))
 	}
 	if opBytes, err := ioutil.ReadAll(stderr); err != nil { // 读取输出结果
 		log.Fatal(err)

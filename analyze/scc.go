@@ -12,6 +12,7 @@ type Component struct {
 	isChanged bool //调用的函数中有无发生改变的
 }
 
+// ComponentGraph 强连通图
 type ComponentGraph struct {
 	belongs map[string]*Component
 	nodes   []*Component
