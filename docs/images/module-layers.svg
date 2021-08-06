@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="205px" preserveAspectRatio="none" style="width:996px;height:205px;background:#FFFFFF;" version="1.1" viewBox="0 0 996 205" width="996px" zoomAndPan="magnify"><defs><filter height="300%" id="f15x6lro225fs5" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[0f1402dd4ba50f92b20010225714ea74]
+cluster Analysis--><polygon fill="#FFFFFF" filter="url(#f15x6lro225fs5)" points="16,6,87,6,94,28.2969,295,28.2969,295,198,16,198,16,6" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="16" x2="94" y1="28.2969" y2="28.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="65" x="20" y="20.9951">Analysis</text><!--MD5=[9479d1c7bce09f51af156661f2edf005]
+cluster Git Repository--><path d="M24,43 C24,33 88,33 88,33 C88,33 152,33 152,43 L152,180 C152,190 88,190 88,190 C88,190 24,190 24,180 L24,43 " fill="#FFFFFF" filter="url(#f15x6lro225fs5)" style="stroke:#000000;stroke-width:1.5;"/><path d="M24,43 C24,53 88,53 88,53 C88,53 152,53 152,43 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="112" x="32" y="67.9951">Git Repository</text><!--MD5=[c0a55fc040d4de26ef61760e050063db]
+cluster Graph--><polygon fill="#FFFFFF" filter="url(#f15x6lro225fs5)" points="339,91,393,91,400,113.2969,591,113.2969,591,174,339,174,339,91" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="339" x2="400" y1="113.2969" y2="113.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="48" x="343" y="105.9951">Graph</text><!--MD5=[e320b41f2d43b11d6de1346cab4ea5fc]
+cluster View--><polygon fill="#FFFFFF" filter="url(#f15x6lro225fs5)" points="635,29,680,29,687,51.2969,979,51.2969,979,171,635,171,635,29" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="635" x2="687" y1="51.2969" y2="51.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="39" x="639" y="43.9951">View</text><!--MD5=[41bff45f2a56cde724c9d1c252049d47]
+entity CallGraph1--><path d="M229,145 L229,169 M229,157 L246,157 " fill="none" filter="url(#f15x6lro225fs5)" style="stroke:#A80036;stroke-width:1.5;"/><ellipse cx="258" cy="157" fill="#FEFECE" filter="url(#f15x6lro225fs5)" rx="12" ry="12" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="212" y="185.9951">CallGraph1</text><!--MD5=[73e1845fb8839aeeeb244930aa6887d6]
+entity CallGraph2--><path d="M229,62 L229,86 M229,74 L246,74 " fill="none" filter="url(#f15x6lro225fs5)" style="stroke:#A80036;stroke-width:1.5;"/><ellipse cx="258" cy="74" fill="#FEFECE" filter="url(#f15x6lro225fs5)" rx="12" ry="12" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="212" y="102.9951">CallGraph2</text><!--MD5=[f940e7492b35650713a1fb19c97d164b]
+entity CommitID1--><polygon fill="#FEFECE" filter="url(#f15x6lro225fs5)" points="40,146,40,182.2969,136,182.2969,136,156,126,146,40,146" style="stroke:#000000;stroke-width:1.5;"/><path d="M126,146 L126,156 L136,156 " fill="#FEFECE" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="50" y="168.9951">CommitID1</text><!--MD5=[a3fb6fc45d61519b08fdf3488b4bf1ed]
+entity CommitID2--><polygon fill="#FEFECE" filter="url(#f15x6lro225fs5)" points="40,75,40,111.2969,136,111.2969,136,85,126,75,40,75" style="stroke:#000000;stroke-width:1.5;"/><path d="M126,75 L126,85 L136,85 " fill="#FEFECE" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76" x="50" y="97.9951">CommitID2</text><!--MD5=[f410e0d7f402702e6cf3a6d86985ff17]
+entity DiffProcessor--><path d="M352,129 L454,129 C459,129 459,142.1484 459,142.1484 C459,142.1484 459,155.2969 454,155.2969 L352,155.2969 C347,155.2969 347,142.1484 347,142.1484 C347,142.1484 347,129 352,129 " fill="#FEFECE" filter="url(#f15x6lro225fs5)" style="stroke:#A80036;stroke-width:1.5;"/><path d="M454,129 C449,129 449,142.1484 449,142.1484 C449,155.2969 454,155.2969 454,155.2969 " fill="none" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="352" y="146.9951">DiffProcessor</text><!--MD5=[a6328b9df3e7e7c295b0ca3067b97c4e]
+entity DiffGraph--><ellipse cx="551" cy="134" fill="#FEFECE" filter="url(#f15x6lro225fs5)" rx="12" ry="12" style="stroke:#A80036;stroke-width:1.5;"/><line style="stroke:#A80036;stroke-width:1.5;" x1="539" x2="563" y1="148" y2="148"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="64" x="519" y="162.9951">DiffGraph</text><!--MD5=[41d1f7b493075ba6035938a89f2892b0]
+entity OutputProcessor--><path d="M648,129 L776,129 C781,129 781,142.1484 781,142.1484 C781,142.1484 781,155.2969 776,155.2969 L648,155.2969 C643,155.2969 643,142.1484 643,142.1484 C643,142.1484 643,129 648,129 " fill="#FEFECE" filter="url(#f15x6lro225fs5)" style="stroke:#A80036;stroke-width:1.5;"/><path d="M776,129 C771,129 771,142.1484 771,142.1484 C771,155.2969 776,155.2969 776,155.2969 " fill="none" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118" x="648" y="146.9951">OutputProcessor</text><!--MD5=[e7de2c71ca0f205b4cc16dd2e14b005b]
+entity j--><polygon fill="#FEFECE" filter="url(#f15x6lro225fs5)" points="841,127,841,163.2969,971,163.2969,971,137,961,127,841,127" style="stroke:#000000;stroke-width:1.5;"/><path d="M961,127 L961,137 L971,137 " fill="#FEFECE" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110" x="851" y="149.9951">CheckList(JSON)</text><!--MD5=[338e9af232e5abde8a6bc8ae9f528414]
+entity g--><polygon fill="#FEFECE" filter="url(#f15x6lro225fs5)" points="849,56,849,92.2969,963,92.2969,963,66,953,56,849,56" style="stroke:#000000;stroke-width:1.5;"/><path d="M953,56 L953,66 L963,66 " fill="#FEFECE" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="859" y="78.9951">Graphviz(svg)</text><!--MD5=[0060a398645dbe2d5485ece9451dcb91]
+link CommitID1 to CallGraph1--><path d="M136.0181,164.2973 C158.4847,164.4364 185.0206,164.6007 206.7811,164.7355 " fill="none" id="CommitID1-to-CallGraph1" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="211.918,164.7673,202.943,160.7116,206.9181,164.7363,202.8934,168.7114,211.918,164.7673" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[169807dcee38d57702c5ad3eb9379676]
+link CommitID2 to CallGraph2--><path d="M136.0181,89.7294 C158.4847,88.1992 185.0206,86.3918 206.7811,84.9096 " fill="none" id="CommitID2-to-CallGraph2" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="211.918,84.5598,202.6669,81.1808,206.9296,84.8997,203.2107,89.1623,211.918,84.5598" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[93830e7bc66a7fbdfb79a9924af1671d]
+link CallGraph1 to DiffProcessor--><path d="M287.0503,159.3736 C303.5196,156.9059 323.2806,153.9449 341.7843,151.1724 " fill="none" id="CallGraph1-to-DiffProcessor" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="346.9662,150.3959,337.4728,147.7739,342.0214,151.1369,338.6584,155.6855,346.9662,150.3959" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[a2cba9ead0024c7b1242fb8559e5d87f]
+link CallGraph2 to DiffProcessor--><path d="M287.0503,96.6777 C310.5833,105.8762 340.8375,117.7019 364.5408,126.9671 " fill="none" id="CallGraph2-to-DiffProcessor" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="369.4946,128.9034,362.5685,121.9014,364.8377,127.0831,359.656,129.3524,369.4946,128.9034" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[9c5e50c75912b0f5eff4d44813834ac1]
+link DiffProcessor to DiffGraph--><path d="M459.3747,142 C477.5862,142 497.3099,142 513.7761,142 " fill="none" id="DiffProcessor-to-DiffGraph" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="518.7764,142,509.7764,138,513.7764,142,509.7764,146,518.7764,142" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[7926b1eb4493ad1a1d94f8c7a489b55d]
+link DiffGraph to OutputProcessor--><path d="M583.1938,142 C598.8792,142 618.4475,142 637.558,142 " fill="none" id="DiffGraph-to-OutputProcessor" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="642.9323,142,633.9323,138,637.9323,142,633.9323,146,642.9323,142" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[e279129b1e9e1f89c21b07ae694ffc21]
+link OutputProcessor to j--><path d="M781.2168,143.0704 C798.7703,143.3418 817.6494,143.6338 835.2765,143.9063 " fill="none" id="OutputProcessor-to-j" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="840.7039,143.9903,831.7669,139.8514,835.7045,143.9129,831.643,147.8504,840.7039,143.9903" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[dbd0018eae812a0a08d61c938b734730]
+link OutputProcessor to g--><path d="M749.4052,128.8889 C777.7286,118.9611 817.1199,105.1538 849.3082,93.8713 " fill="none" id="OutputProcessor-to-g" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="854.4096,92.0832,844.5931,91.2856,849.6911,93.7372,847.2395,98.8352,854.4096,92.0832" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[95c70418345655b17004e0fcfeba82df]
+@startuml module-layers
+left to right direction
+package Analysis {
+    database "Git Repository" {
+        file CommitID1
+        file CommitID2
+    }
+    boundary CallGraph1
+    boundary CallGraph2
+}
+
+CommitID1 - -> CallGraph1 
+CommitID2 - -> CallGraph2 
+
+package Graph {
+    queue DiffProcessor
+    entity DiffGraph
+}
+
+CallGraph1 - -> DiffProcessor
+CallGraph2 - -> DiffProcessor
+
+DiffProcessor - -> DiffGraph
+
+package View {
+    queue OutputProcessor
+    file "CheckList(JSON)" as j
+    file "Graphviz(svg)" as g
+}
+
+DiffGraph - -> OutputProcessor
+
+
+OutputProcessor - ->  j
+OutputProcessor - ->  g
+
+@enduml
+
+PlantUML version 1.2021.7(Sun May 23 12:40:07 UTC 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: ANSI_X3.4-1968
+Language: en
+Country: US
+--></g></svg>
