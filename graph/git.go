@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"calldiff/common"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
+
+	"github.com/bytecamp2021-calldiff/calldiff/common"
 )
 
 // Clone a repository using clone options

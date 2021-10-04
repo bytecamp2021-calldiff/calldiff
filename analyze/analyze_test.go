@@ -1,9 +1,10 @@
 package analyze
 
 import (
-	"calldiff/view"
 	"fmt"
 	"testing"
+
+	"github.com/bytecamp2021-calldiff/calldiff/view"
 )
 
 func makeTestGraph(n []int, e [][]int, h []int, g *Graph) {

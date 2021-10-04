@@ -1,9 +1,6 @@
 package main
 
 import (
-	"calldiff/analyze"
-	"calldiff/common"
-	"calldiff/graph"
 	"flag"
 	"go/build"
 	"os"
@@ -11,6 +8,10 @@ import (
 	"sync"
 
 	"golang.org/x/tools/go/buildutil"
+
+	"github.com/bytecamp2021-calldiff/calldiff/analyze"
+	"github.com/bytecamp2021-calldiff/calldiff/common"
+	"github.com/bytecamp2021-calldiff/calldiff/graph"
 )
 
 func init() {

@@ -1,7 +1,6 @@
 package view
 
 import (
-	"calldiff/common"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,6 +12,8 @@ import (
 	"unicode"
 
 	"github.com/awalterschulze/gographviz"
+
+	"github.com/bytecamp2021-calldiff/calldiff/common"
 )
 
 type DiffType int

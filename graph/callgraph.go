@@ -1,7 +1,6 @@
 package graph
 
 import (
-	"calldiff/common"
 	"fmt"
 	"go/token"
 	"io/ioutil"
@@ -15,6 +14,8 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 	"golang.org/x/tools/go/ssa/ssautil"
+
+	"github.com/bytecamp2021-calldiff/calldiff/common"
 )
 
 func GetCallGraph(diffOptions *common.DiffOptions, graphOptions *common.GraphOptions, wg *sync.WaitGroup) {

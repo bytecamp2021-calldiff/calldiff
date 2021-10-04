@@ -1,9 +1,9 @@
 package analyze
 
 import (
-	"calldiff/view"
-
 	"golang.org/x/tools/go/callgraph"
+
+	"github.com/bytecamp2021-calldiff/calldiff/view"
 )
 
 //给diffGraph添加上点集
